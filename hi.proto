@@ -4,6 +4,7 @@ package higrpc;
 
 service Hi {
 	rpc SayHi (HiRequest) returns (HiResponse) {}
+	rpc CountLength (HiRequest) returns (HiResponse) {} 
 }
 
 message HiRequest {

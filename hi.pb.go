@@ -131,11 +131,15 @@ var file_hi_proto_rawDesc = []byte{
 	0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e,
 	0x61, 0x6d, 0x65, 0x22, 0x26, 0x0a, 0x0a, 0x48, 0x69, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
 	0x65, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x36, 0x0a, 0x02, 0x48,
+	0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x32, 0x6e, 0x0a, 0x02, 0x48,
 	0x69, 0x12, 0x30, 0x0a, 0x05, 0x53, 0x61, 0x79, 0x48, 0x69, 0x12, 0x11, 0x2e, 0x68, 0x69, 0x67,
 	0x72, 0x70, 0x63, 0x2e, 0x48, 0x69, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e,
 	0x68, 0x69, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x48, 0x69, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x22, 0x00, 0x12, 0x36, 0x0a, 0x0b, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x4c, 0x65, 0x6e, 0x67,
+	0x74, 0x68, 0x12, 0x11, 0x2e, 0x68, 0x69, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x48, 0x69, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x12, 0x2e, 0x68, 0x69, 0x67, 0x72, 0x70, 0x63, 0x2e, 0x48,
+	0x69, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -157,9 +161,11 @@ var file_hi_proto_goTypes = []interface{}{
 }
 var file_hi_proto_depIdxs = []int32{
 	0, // 0: higrpc.Hi.SayHi:input_type -> higrpc.HiRequest
-	1, // 1: higrpc.Hi.SayHi:output_type -> higrpc.HiResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 1: higrpc.Hi.CountLength:input_type -> higrpc.HiRequest
+	1, // 2: higrpc.Hi.SayHi:output_type -> higrpc.HiResponse
+	1, // 3: higrpc.Hi.CountLength:output_type -> higrpc.HiResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -229,6 +235,7 @@ const _ = grpc.SupportPackageIsVersion6
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type HiClient interface {
 	SayHi(ctx context.Context, in *HiRequest, opts ...grpc.CallOption) (*HiResponse, error)
+	CountLength(ctx context.Context, in *HiRequest, opts ...grpc.CallOption) (*HiResponse, error)
 }
 
 type hiClient struct {
@@ -248,9 +255,19 @@ func (c *hiClient) SayHi(ctx context.Context, in *HiRequest, opts ...grpc.CallOp
 	return out, nil
 }
 
+func (c *hiClient) CountLength(ctx context.Context, in *HiRequest, opts ...grpc.CallOption) (*HiResponse, error) {
+	out := new(HiResponse)
+	err := c.cc.Invoke(ctx, "/higrpc.Hi/CountLength", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HiServer is the server API for Hi service.
 type HiServer interface {
 	SayHi(context.Context, *HiRequest) (*HiResponse, error)
+	CountLength(context.Context, *HiRequest) (*HiResponse, error)
 }
 
 // UnimplementedHiServer can be embedded to have forward compatible implementations.
@@ -259,6 +276,9 @@ type UnimplementedHiServer struct {
 
 func (*UnimplementedHiServer) SayHi(context.Context, *HiRequest) (*HiResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SayHi not implemented")
+}
+func (*UnimplementedHiServer) CountLength(context.Context, *HiRequest) (*HiResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CountLength not implemented")
 }
 
 func RegisterHiServer(s *grpc.Server, srv HiServer) {
@@ -283,6 +303,24 @@ func _Hi_SayHi_Handler(srv interface{}, ctx context.Context, dec func(interface{
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Hi_CountLength_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HiRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HiServer).CountLength(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/higrpc.Hi/CountLength",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HiServer).CountLength(ctx, req.(*HiRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Hi_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "higrpc.Hi",
 	HandlerType: (*HiServer)(nil),
@@ -290,6 +328,10 @@ var _Hi_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SayHi",
 			Handler:    _Hi_SayHi_Handler,
+		},
+		{
+			MethodName: "CountLength",
+			Handler:    _Hi_CountLength_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
