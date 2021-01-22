@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package filegrpc;
+
+service File {
+	rpc SendFile (FileRequest) returns (FileResponse) {}
+}
+
+message FileRequest {
+	string filename = 1;
+	bytes  data = 2;
+}
+
+message FileResponse {
+	string response = 1;
+}
