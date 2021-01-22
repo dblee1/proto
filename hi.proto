@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package higrpc;
+
+service Hi {
+	rpc SayHi (HiRequest) returns (HiResponse) {}
+}
+
+message HiRequest {
+	string name = 1;
+}
+
+message HiResponse {
+	string message = 1;
+}
